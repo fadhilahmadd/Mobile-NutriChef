@@ -34,6 +34,6 @@ Expo Go enables you to work with all of the [Components and APIs](https://facebo
 - Open the project by scanning the QR code in the terminal.
 
 ## Screenshots
-<img src="https://github.com/fadhilahmadd/img/blob/main/nutrichef-splash.png" width="18%"></img>
-<img src="https://github.com/fadhilahmadd/img/blob/main/nutrichef-home.png" width="18%"></img>
-<img src="https://github.com/fadhilahmadd/img/blob/main/nutrichef-uploads.png" width="18%"></img>
+<img src="https://github.com/fadhilahmadd/img/blob/main/nutrichef-splash.png" width="25%"></img>
+<img src="https://github.com/fadhilahmadd/img/blob/main/nutrichef-home.png" width="25%"></img>
+<img src="https://github.com/fadhilahmadd/img/blob/main/nutrichef-uploads.png" width="25%"></img>
