@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
+import baseURL from '../hooks/config';
 
 export default function AllRecipesDetect({ route }) {
     const { activeCategories } = route.params;
@@ -26,7 +27,7 @@ export default function AllRecipesDetect({ route }) {
 
     const getRecipes = async (kategori) => {
         try {
-            const response = await axios.get(`http://192.168.0.114:5000/api/json/v1/all_meals_detect/${kategori}`);
+            const response = await axios.get(`${baseURL}/all_meals_detect/${kategori}`);
             if (response && response.data) {
                 setMeals(response.data.meals);
             }
@@ -37,7 +38,7 @@ export default function AllRecipesDetect({ route }) {
 
     const getCategoryImage = async (kategori) => {
         try {
-            const response = await axios.get(`http://192.168.0.114:5000/api/json/v1/all_categories_detect/${kategori}`);
+            const response = await axios.get(`${baseURL}/all_categories_detect/${kategori}`);
             if (response && response.data && response.data.categories && response.data.categories.length > 0) {
                 const imageUrl = response.data.categories[0].strCategoryThumb;
                 setCategoryImage(imageUrl);

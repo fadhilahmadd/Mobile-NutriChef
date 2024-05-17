@@ -12,6 +12,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DeteksiScreen from '../screens/UploadScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import baseURL from '../hooks/config';
+import URL from '../hooks/cfg';
+import KesehatanScreen from '../screens/KesehatanScreen';
 
 function Dashboard() {
     const [activeCategory, setActiveCategory] = useState('Daging');
@@ -69,7 +72,7 @@ function Dashboard() {
 
     const getCategories = async () => {
         try {
-            const response = await axios.get('http://192.168.0.114:5000/api/json/v1/categories');
+            const response = await axios.get(`${baseURL}/categories`);
             // const response = await axios.get('https://themealdb.com/api/json/v1/1/categories.php');
             // console.log('mendapatkan kategori: ', response.data);
             if (response && response.data) {
@@ -82,7 +85,7 @@ function Dashboard() {
 
     const getRecipes = async (category = "Daging") => {
         try {
-            const response = await axios.get(`http://192.168.0.114:5000/api/json/v1/meals/${category}`);
+            const response = await axios.get(`${baseURL}/meals/${category}`);
             // const response = await axios.get(`https://themealdb.com/api/json/v1/1/filter.php?c=${category}`);
             // console.log('mendapatkan resep: ', response.data);
             if (response && response.data) {
@@ -96,7 +99,7 @@ function Dashboard() {
     const handleLogout = async () => {
         try {
             // Send logout request to the backend
-            await axios.post('http://192.168.0.114:5000/logout');
+            await axios.post(`${URL}/logout`);
 
             // Clear token from AsyncStorage
             await AsyncStorage.removeItem('token');
@@ -126,10 +129,10 @@ function Dashboard() {
                     </View>
                     <TouchableOpacity onPress={() => handleLogout()}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <View style={{ borderRadius: hp(5) / 2, width: hp(12.5), height: hp(5), backgroundColor: '#0891b2', alignItems: 'left', justifyContent: 'center', marginLeft: 10 }}>
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>  Keluar</Text>
+                            <View style={{ borderRadius: hp(5) / 2, width: hp(12.5), height: hp(5), backgroundColor: '#353434', alignItems: 'left', justifyContent: 'center', marginLeft: 10 }}>
+                                <Text style={{ color: 'white', fontWeight: 'bold' }}>    Keluar</Text>
                             </View>
-                            <View style={{ borderRadius: hp(5) / 2, width: hp(5), height: hp(5), backgroundColor: '#0891b2', alignItems: 'center', justifyContent: 'center', marginLeft: -40 }}>
+                            <View style={{ borderRadius: hp(5) / 2, width: hp(5), height: hp(5), backgroundColor: '#353434', alignItems: 'center', justifyContent: 'center', marginLeft: -40 }}>
                                 <ArrowRightCircleIcon size={hp(4)} color="white" />
                             </View>
                         </View>
@@ -203,13 +206,13 @@ function Dashboard() {
 
 
 
-function AnotherScreen2() {
-    return (
-        <View className="flex-1 bg-white">
-            <Text>Another Screen 2</Text>
-        </View>
-    );
-}
+// function Kesehatan() {
+//     return (
+//         <View className="flex-1 bg-white">
+//             <Text>Another Screen 2</Text>
+//         </View>
+//     );
+// }
 
 const Tab = createBottomTabNavigator();
 
@@ -245,7 +248,7 @@ export default function HomeScreenUser() {
             />
             <Tab.Screen
                 name="Kesehatan"
-                component={AnotherScreen2}
+                component={KesehatanScreen}
                 options={{
                     tabBarIcon: ({ color, size }) => (
                         <HeartIcon color={color} size={size} />

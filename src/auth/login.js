@@ -4,6 +4,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons for icons
+import URL from '../hooks/cfg';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -12,14 +13,14 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post('http://192.168.0.114:5000/login', {
+            const response = await axios.post(`${URL}/login`, {
                 email,
                 password,
             });
             const token = response.data.token;
             await AsyncStorage.setItem('token', token);
 
-            const usernameResponse = await axios.get(`http://192.168.0.114:5000/username/${email}`);
+            const usernameResponse = await axios.get(`${URL}/username/${email}`);
             const username = usernameResponse.data.username;
 
             await AsyncStorage.setItem('username', username);

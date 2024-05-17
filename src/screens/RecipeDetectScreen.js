@@ -8,6 +8,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import baseURL from '../hooks/config';
 
 export default function RecipeDetectScreen({ route }) {
     const { categories } = route.params;
@@ -35,7 +36,7 @@ export default function RecipeDetectScreen({ route }) {
     const getCategories = async (kategori = categories) => {
         const formattedCategories = kategori.replace(/,\s+/g, ',').replace(/\s+/g, '%20');
         try {
-            const response = await axios.get(`http://192.168.0.114:5000/api/json/v1/categories_detect/${formattedCategories}`);
+            const response = await axios.get(`${baseURL}/categories_detect/${formattedCategories}`);
             if (response && response.data) {
                 const uniqueCategories = response.data.categories.filter((category, index, self) =>
                     index === self.findIndex((c) => (
@@ -51,7 +52,7 @@ export default function RecipeDetectScreen({ route }) {
 
     const getRecipes = async (kategori = categories) => {
         try {
-            const response = await axios.get(`http://192.168.0.114:5000/api/json/v1/meals_detect/${kategori}`);
+            const response = await axios.get(`${baseURL}/meals_detect/${kategori}`);
             // console.log('mendapatkan resep: ', response.data);
             if (response && response.data) {
                 setMeals(response.data.meals);
@@ -70,7 +71,7 @@ export default function RecipeDetectScreen({ route }) {
 
     const getCategoryImage = async (kategori) => {
         try {
-            const response = await axios.get(`http://192.168.0.114:5000/api/json/v1/categories_detect/${kategori}`);
+            const response = await axios.get(`${baseURL}/categories_detect/${kategori}`);
             if (response && response.data && response.data.categories && response.data.categories.length > 0) {
                 const imageUrl = response.data.categories[0].strCategoryThumb;
                 setCategoryImage(imageUrl);

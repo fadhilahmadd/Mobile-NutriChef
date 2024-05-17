@@ -10,6 +10,7 @@ import axios from 'axios';
 import Loading from '../components/loading';
 import YoutubeIframe from 'react-native-youtube-iframe';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import baseURL from '../hooks/config';
 
 export default function RecipeDetailScreen(props) {
     let item = props.route.params;
@@ -26,7 +27,7 @@ export default function RecipeDetailScreen(props) {
 
     const getMealData = async (id) => {
         try {
-            const response = await axios.get(`http://192.168.0.114:5000/api/json/v1/recipe/${id}`);
+            const response = await axios.get(`${baseURL}/recipe/${id}`);
             // const response = await axios.get(`https://themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
             // console.log('mendapatkan data makanan: ', response.data);
             if (response && response.data) {

@@ -1,17 +1,18 @@
-import { View, Text, ScrollView, Image, TextInput, BackHandler, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { StatusBar } from 'expo-status-bar'
+import { View, Text, ScrollView, Image, TextInput, BackHandler, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { ArrowRightCircleIcon, BellIcon, HeartIcon, HomeIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
+import { ArrowRightCircleIcon, BellIcon, HeartIcon, HomeIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
 import Categories from '../components/categories';
 import axios from 'axios';
 import Recipes from '../components/recipes';
 import { ViewfinderCircleIcon } from 'react-native-heroicons/solid';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import DeteksiScreen from './UploadScreen'
+import DeteksiScreen from './UploadScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import baseURL from '../hooks/config';
 
 function Dashboard() {
   const [activeCategory, setActiveCategory] = useState('Daging');
@@ -30,7 +31,6 @@ function Dashboard() {
 
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       if (navigation.isFocused() && route.name === 'Halaman Utama') {
-        
         setShowExitAlert(true);
         return true;
       }
@@ -38,39 +38,35 @@ function Dashboard() {
     });
 
     return () => backHandler.remove();
-  }, [navigation, route])
+  }, [navigation, route]);
 
-  const handleChangeCategory = category => {
+  const handleChangeCategory = (category) => {
     getRecipes(category);
     setActiveCategory(category);
     setMeals([]);
-  }
+  };
 
   const getCategories = async () => {
     try {
-      const response = await axios.get('http://192.168.0.114:5000/api/json/v1/categories');
-      // const response = await axios.get('https://themealdb.com/api/json/v1/1/categories.php');
-      // console.log('mendapatkan kategori: ', response.data);
+      const response = await axios.get(`${baseURL}/categories`);
       if (response && response.data) {
         setCategories(response.data.categories);
       }
     } catch (err) {
       console.log('error: ', err.message);
     }
-  }
+  };
 
-  const getRecipes = async (category = "Daging") => {
+  const getRecipes = async (category = 'Daging') => {
     try {
-      const response = await axios.get(`http://192.168.0.114:5000/api/json/v1/meals/${category}`);
-      // const response = await axios.get(`https://themealdb.com/api/json/v1/1/filter.php?c=${category}`);
-      // console.log('mendapatkan resep: ', response.data);
+      const response = await axios.get(`${baseURL}/meals/${category}`);
       if (response && response.data) {
         setMeals(response.data.meals);
       }
     } catch (err) {
       console.log('error: ', err.message);
     }
-  }
+  };
 
   const checkLoginStatus = async () => {
     const token = await AsyncStorage.getItem('token');
@@ -79,30 +75,55 @@ function Dashboard() {
 
   return (
     <View className="flex-1 bg-white">
-      <StatusBar style='dark' />
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 50 }} className="space-y-6 pt-14">
+      <StatusBar style="dark" />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 50 }}
+        className="space-y-6 pt-14"
+      >
         {/* avatar dan bell icon */}
         <View className="mx-4 flex-row justify-between items-center">
           <Image source={require('../../assets/images/NutriChef.png')} style={{ height: hp(7), width: hp(7.5) }} />
           <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ borderRadius: hp(5) / 2, width: hp(12.5), height: hp(5), backgroundColor: '#0891b2', alignItems: 'left', justifyContent: 'center', marginLeft: 10 }}>
-                <Text style={{ color: 'white', fontWeight: 'bold' }}>  Masuk</Text>
+              <View
+                style={{
+                  borderRadius: hp(5) / 2,
+                  width: hp(12.5),
+                  height: hp(5),
+                  backgroundColor: '#0891b2',
+                  alignItems: 'left',
+                  justifyContent: 'center',
+                  marginLeft: 10,
+                }}
+              >
+                <Text style={{ color: 'white', fontWeight: 'bold' }}>    Masuk</Text>
               </View>
-              <View style={{ borderRadius: hp(5) / 2, width: hp(5), height: hp(5), backgroundColor: '#0891b2', alignItems: 'center', justifyContent: 'center', marginLeft: -40 }}>
+              <View
+                style={{
+                  borderRadius: hp(5) / 2,
+                  width: hp(5),
+                  height: hp(5),
+                  backgroundColor: '#0891b2',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: -40,
+                }}
+              >
                 <ArrowRightCircleIcon size={hp(4)} color="white" />
               </View>
             </View>
-            {/* <Text>{loggedIn && <Text>You are logged in</Text>}
-              {!loggedIn && <Text>You are not logged in</Text>}
-            </Text> */}
           </TouchableOpacity>
         </View>
 
         <View className="mx-4 space-y-2 mb-2">
-          <Text style={{ fontSize: hp(1.7) }} className="text-neutral-600">Selamat Datang,</Text>
+          <Text style={{ fontSize: hp(1.7) }} className="text-neutral-600">
+            Selamat Datang,
+          </Text>
           <View>
-            <Text style={{ fontSize: hp(2.8) }} className="font-semibold text-neutral-600">Buat makanan sehat anda,</Text>
+            <Text style={{ fontSize: hp(2.8) }} className="font-semibold text-neutral-600">
+              Buat makanan sehat anda,
+            </Text>
           </View>
           <Text style={{ fontSize: hp(2.8) }} className="font-semibold text-neutral-600">
             jagalah <Text className="text-cyan-500">kesehatan</Text>
@@ -111,14 +132,15 @@ function Dashboard() {
 
         {/* kategori */}
         <View>
-          {categories.length > 0 && <Categories categories={categories} activeCategory={activeCategory} handleChangeCategory={handleChangeCategory} />}
+          {categories.length > 0 && (
+            <Categories categories={categories} activeCategory={activeCategory} handleChangeCategory={handleChangeCategory} />
+          )}
         </View>
 
         {/* resep */}
         <View>
           <Recipes meals={meals} categories={categories} />
         </View>
-
       </ScrollView>
       <View className="flex-1 bg-white">
         {/* exit app */}
@@ -142,13 +164,13 @@ function Dashboard() {
         />
       </View>
     </View>
-  )
+  );
 }
 
-function AnotherScreen2() {
+function KesehatanScreen() {
   return (
     <View className="flex-1 bg-white">
-      <Text>Another Screen 2</Text>
+      <Text>Kesehatan Screen Content</Text>
     </View>
   );
 }
@@ -156,39 +178,79 @@ function AnotherScreen2() {
 const Tab = createBottomTabNavigator();
 
 export default function HomeScreen() {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <Tab.Screen
-        name="Halaman Utama"
-        component={Dashboard}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <HomeIcon color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Deteksi"
-        component={DeteksiScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <ViewfinderCircleIcon color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Kesehatan"
-        component={AnotherScreen2}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <HeartIcon color={color} size={size} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+  const [showLoginAlert, setShowLoginAlert] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const token = await AsyncStorage.getItem('token');
+      setLoggedIn(!!token);
+    };
+
+    checkLoginStatus();
+  }, []);
+
+  const handleKesehatanPress = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      setShowLoginAlert(true);
+      return false;
+    }
+    return true;
+  };
+
+  return (
+    <>
+      <AwesomeAlert
+        show={showLoginAlert}
+        showProgress={false}
+        title="Peringatan"
+        message="Anda Perlu Login"
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={true}
+        showConfirmButton={true}
+        confirmText="OK"
+        confirmButtonColor="#0891b2"
+        onConfirmPressed={() => setShowLoginAlert(false)}
+      />
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Tab.Screen
+          name="Halaman Utama"
+          component={Dashboard}
+          options={{
+            tabBarIcon: ({ color, size }) => <HomeIcon color={color} size={size} />,
+          }}
+        />
+        <Tab.Screen
+          name="Deteksi"
+          component={DeteksiScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => <ViewfinderCircleIcon color={color} size={size} />,
+          }}
+        />
+        <Tab.Screen
+          name="Kesehatan"
+          component={KesehatanScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => <HeartIcon color={color} size={size} />,
+            tabBarButton: (props) => (
+              <TouchableOpacity
+                {...props}
+                onPress={async () => {
+                  const allowed = await handleKesehatanPress();
+                  if (allowed) {
+                    props.onPress();
+                  }
+                }}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </>
   );
 }

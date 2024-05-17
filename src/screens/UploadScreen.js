@@ -6,7 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { CameraIcon, ExclamationCircleIcon, PhotoIcon } from 'react-native-heroicons/solid';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Loading from '../components/loading';
-import Animated, { Easing } from 'react-native-reanimated';
+import URL from '../hooks/cfg';
 
 const UploadScreen = () => {
     const [selectedImages, setSelectedImages] = useState([]);
@@ -28,16 +28,6 @@ const UploadScreen = () => {
 
         return () => backHandler.remove();
     }, [navigation]);
-
-    // useEffect(() => {
-        //Clear selected images and upload response when navigating back to this screen
-        // const unsubscribe = navigation.addListener('focus', () => {
-        //     setSelectedImages([]);
-        //     setUploadResponse(null);
-        // });
-
-        // return unsubscribe;
-    // }, [navigation]);
 
     const pickImages = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -80,7 +70,6 @@ const UploadScreen = () => {
         const uri = result.uri || (result.assets && result.assets.length > 0 && result.assets[0].uri);
 
         if (!uri) {
-            // alert('Tidak dapat mendapatkan gambar dari camera.');
             return;
         }
 
@@ -94,7 +83,6 @@ const UploadScreen = () => {
                 jpg: 'image/jpeg',
                 jpeg: 'image/jpeg',
                 png: 'image/png',
-                // gif: 'image/gif',
             };
             const mimeType = mimeTypes[fileType.toLowerCase()] || 'application/octet-stream';
 
@@ -126,7 +114,7 @@ const UploadScreen = () => {
         });
 
         try {
-            const response = await fetch('http://192.168.0.114:5000/upload', {
+            const response = await fetch(`${URL}/upload`, {
                 method: 'POST',
                 body: data,
                 headers: {
@@ -151,10 +139,15 @@ const UploadScreen = () => {
         setSelectedImages(updatedImages);
     };
 
+    const clearImagesAndResults = () => {
+        setSelectedImages([]);
+        setUploadResponse(null);
+    };
+
     const viewRecipeByCategories = () => {
         const allClasses = uploadResponse.results.map((result) => result.class);
         const filteredAllClasses = allClasses.filter((cls) => cls !== "Tidak Diketahui");
-        // Filter out "Tidak Diketahui" class
+
         const filteredClasses = allClasses.filter((cls) => cls !== "Tidak Diketahui");
 
         const joinedClasses = filteredClasses.join(', ');
@@ -165,7 +158,7 @@ const UploadScreen = () => {
     const viewRecipeAllByCategories = () => {
         const allClasses = uploadResponse.results.map((result) => result.class);
         const filteredAllClasses = allClasses.filter((cls) => cls !== "Tidak Diketahui");
-        // Filter out "Tidak Diketahui" class
+
         const filteredClasses = allClasses.filter((cls) => cls !== "Tidak Diketahui");
 
         const joinedClasses = filteredClasses.join(', ');
@@ -175,16 +168,15 @@ const UploadScreen = () => {
 
     return (
         <ScrollView style={styles.container}>
-            {/* <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.backButton}>
-                    <ChevronLeftIcon size={hp(3)} strokeWidth={4.5} color="#0891b2" />
-                </TouchableOpacity>
-            </View> */}
-
             <View style={styles.content}>
                 {selectedImages.length > 0 && (
                     <View style={styles.imageContainer}>
-                        <Text style={styles.heading}>Gambar</Text>
+                        <View style={styles.imageHeader}>
+                            <Text style={styles.heading}>Gambar</Text>
+                            <TouchableOpacity onPress={clearImagesAndResults}>
+                                <Text style={styles.clearText}>Bersihkan</Text>
+                            </TouchableOpacity>
+                        </View>
                         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imageScrollView}>
                             {selectedImages.map((image, index) => (
                                 <View key={index} style={styles.imageItem}>
@@ -217,7 +209,6 @@ const UploadScreen = () => {
                 </View>
                 <Button title="Deteksi Gambar" onPress={uploadImages} />
 
-                {/* Display the upload response */}
                 {isLoading && <Loading />}
                 {uploadResponse && (
                     <View style={styles.uploadResponse}>
@@ -233,7 +224,6 @@ const UploadScreen = () => {
                                                 <Text style={[styles.successText, result.class === "Tidak Diketahui" ? styles.redText : null]}>{index + 1}. {result.class}</Text>
                                             </View>
                                         ))}
-                                        {/* Conditionally render "View Recipes" button */}
                                         {uploadResponse.results.some(result => result.class !== "Tidak Diketahui") && (
                                             <>
                                                 <Text></Text>
@@ -263,21 +253,6 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#FFFFFF',
     },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingTop: hp(5),
-        paddingHorizontal: wp(5),
-    },
-    backButton: {
-        padding: wp(2),
-        borderRadius: 100,
-        backgroundColor: 'white',
-    },
-    logo: {
-        height: hp(7),
-        width: hp(7.5),
-    },
     content: {
         paddingHorizontal: wp(4),
         marginTop: hp(8),
@@ -287,10 +262,19 @@ const styles = StyleSheet.create({
     imageContainer: {
         marginBottom: hp(3),
     },
+    imageHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     heading: {
         fontSize: hp(2.5),
         fontWeight: 'bold',
         color: '#444444',
+    },
+    clearText: {
+        fontSize: hp(2),
+        color: '#FF0000',
     },
     imageScrollView: {
         marginTop: hp(1),
