@@ -204,16 +204,6 @@ function Dashboard() {
     )
 }
 
-
-
-// function Kesehatan() {
-//     return (
-//         <View className="flex-1 bg-white">
-//             <Text>Another Screen 2</Text>
-//         </View>
-//     );
-// }
-
 const Tab = createBottomTabNavigator();
 
 export default function HomeScreenUser() {
@@ -238,7 +228,7 @@ export default function HomeScreenUser() {
                 }}
             />
             <Tab.Screen
-                name="Deteksi"
+                name="Deteksi Bahan Makanan"
                 component={DeteksiScreen}
                 options={{
                     tabBarIcon: ({ color, size }) => (

@@ -6,11 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -25,14 +20,10 @@
         "android.permission.INTERNET",
         "android.permission.RECORD_AUDIO"
       ],
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "package": "com.fadhilahmad.NutriChef"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      
     },
     "plugins": [
       [

@@ -226,7 +226,7 @@ export default function HomeScreen() {
           }}
         />
         <Tab.Screen
-          name="Deteksi"
+          name="Deteksi Bahan Makanan"
           component={DeteksiScreen}
           options={{
             tabBarIcon: ({ color, size }) => <ViewfinderCircleIcon color={color} size={size} />,
