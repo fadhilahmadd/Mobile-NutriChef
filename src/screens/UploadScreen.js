@@ -17,7 +17,7 @@ const UploadScreen = () => {
 
     useEffect(() => {
         const backAction = () => {
-            navigation.navigate('Home');
+            navigation.goBack();
             return true;
         };
 
@@ -196,18 +196,20 @@ const UploadScreen = () => {
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={pickImages} style={styles.uploadButton}>
                         <PhotoIcon size={hp(7)} strokeWidth={4.5} color="#0891b2" />
-                        <Text style={styles.buttonText}>Unggah Gambar</Text>
+                        <Text style={styles.buttonTextAtas}>Unggah Gambar</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={captureFromCamera} style={styles.cameraButton}>
                         <CameraIcon size={hp(7)} strokeWidth={4.5} color="#0891b2" />
-                        <Text style={styles.buttonText}>Ambil Gambar</Text>
+                        <Text style={styles.buttonTextAtas}>Ambil Gambar</Text>
                     </TouchableOpacity>
                 </View>
                 <View className="flex-row align-items-center mt-2 mb-2">
                     <ExclamationCircleIcon size={hp(2.2)} color="#eed202" />
                     <Text style={[styles.warningText, { fontSize: hp(1.6) }]}>Unggah atau ambil gambar sayur satu per satu!</Text>
                 </View>
-                <Button title="Deteksi Gambar" onPress={uploadImages} />
+                <TouchableOpacity onPress={uploadImages} style={styles.detectButton}>
+                    <Text style={styles.buttonText}>Deteksi Gambar</Text>
+                </TouchableOpacity>
 
                 {isLoading && <Loading />}
                 {uploadResponse && (
@@ -227,13 +229,17 @@ const UploadScreen = () => {
                                         {uploadResponse.results.some(result => result.class !== "Tidak Diketahui") && (
                                             <>
                                                 <Text></Text>
-                                                <Button title="Lihat Resep Bahan" onPress={viewRecipeByCategories} />
+                                                <TouchableOpacity onPress={viewRecipeByCategories} style={styles.detectButton}>
+                                                    <Text style={styles.buttonText}>Lihat Resep Bahan</Text>
+                                                </TouchableOpacity>
                                             </>
                                         )}
                                         {uploadResponse.results.filter(result => result.class !== "Tidak Diketahui").length > 1 && (
                                             <>
                                                 <Text></Text>
-                                                <Button title="Lihat Resep Semua Bahan" onPress={viewRecipeAllByCategories} />
+                                                <TouchableOpacity onPress={viewRecipeAllByCategories} style={styles.detectButton}>
+                                                    <Text style={styles.buttonText}>Lihat Resep Semua Bahan</Text>
+                                                </TouchableOpacity>
                                             </>
                                         )}
                                     </View>
@@ -308,9 +314,20 @@ const styles = StyleSheet.create({
         borderRadius: hp(2),
         alignItems: 'center',
     },
-    buttonText: {
+    buttonTextAtas: {
         fontSize: hp(1.6),
         color: '#0891b2',
+    },
+    buttonText: {
+        fontSize: hp(1.6),
+        color: '#fff',
+    },
+    detectButton: {
+        backgroundColor: '#0891b2',
+        paddingVertical: hp(1.5),
+        borderRadius: hp(1),
+        alignItems: 'center',
+        marginVertical: hp(1),
     },
     uploadResponse: {
         marginTop: hp(2),

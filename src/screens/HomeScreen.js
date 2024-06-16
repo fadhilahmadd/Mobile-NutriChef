@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Image, TextInput, BackHandler, TouchableOpacity
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { ArrowRightCircleIcon, BellIcon, HeartIcon, HomeIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
+import { ArrowRightCircleIcon, BellIcon, CalendarDaysIcon, HomeIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
 import Categories from '../components/categories';
 import axios from 'axios';
 import Recipes from '../components/recipes';
@@ -149,7 +149,7 @@ function Dashboard() {
           showProgress={false}
           title="Keluar dari Aplikasi"
           message="Apakah Anda yakin ingin keluar?"
-          closeOnTouchOutside={true}
+          closeOnTouchOutside={false}
           closeOnHardwareBackPress={true}
           showCancelButton={true}
           showConfirmButton={true}
@@ -206,7 +206,7 @@ export default function HomeScreen() {
         showProgress={false}
         title="Peringatan"
         message="Anda Perlu Login"
-        closeOnTouchOutside={true}
+        closeOnTouchOutside={false}
         closeOnHardwareBackPress={true}
         showConfirmButton={true}
         confirmText="OK"
@@ -216,6 +216,9 @@ export default function HomeScreen() {
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
+          style: {
+            elevation: 0,
+          },
         }}
       >
         <Tab.Screen
@@ -233,10 +236,10 @@ export default function HomeScreen() {
           }}
         />
         <Tab.Screen
-          name="Kesehatan"
+          name="Menu Makan Harian"
           component={KesehatanScreen}
           options={{
-            tabBarIcon: ({ color, size }) => <HeartIcon color={color} size={size} />,
+            tabBarIcon: ({ color, size }) => <CalendarDaysIcon color={color} size={size} />,
             tabBarButton: (props) => (
               <TouchableOpacity
                 {...props}

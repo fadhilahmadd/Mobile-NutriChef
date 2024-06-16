@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Image, TextInput, BackHandler, TouchableOpacity
 import React, { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { ArrowRightCircleIcon, BellIcon, HeartIcon, HomeIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
+import { ArrowRightCircleIcon, BellIcon, CalendarDaysIcon, HomeIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
 import Categories from '../components/categories';
 import axios from 'axios';
 import Recipes from '../components/recipes';
@@ -53,7 +53,7 @@ function Dashboard() {
         getRecipes(); // Fetch recipes
 
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            if (navigation.isFocused() && route.name === 'Halaman Utama') {
+            if (navigation.isFocused() && route.name === 'Halaman Utama' || route.name === 'LoginScreen') {
                 // Show the confirmation alert
                 setShowExitAlert(true);
                 return true; // Indicate that the back action is handled
@@ -125,7 +125,8 @@ function Dashboard() {
                 <View className="mx-4 flex-row justify-between items-center">
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image source={require('../../assets/images/avatar.png')} style={{ height: hp(4), width: hp(4) }} />
-                        <Text style={{ marginLeft: hp(1), color: 'black', fontWeight: 'bold' }}>{username}</Text>
+                        <Text style={{ marginLeft: hp(1), color: 'black', fontWeight: 'semi-bold' }}>Hai, </Text>
+                        <Text style={{ color: 'black', fontWeight: 'bold' }}>{username}</Text>
                     </View>
                     <TouchableOpacity onPress={() => handleLogout()}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -169,7 +170,7 @@ function Dashboard() {
                     showProgress={false}
                     title="Keluar dari Aplikasi"
                     message="Apakah Anda yakin ingin keluar aplikasi?"
-                    closeOnTouchOutside={true}
+                    closeOnTouchOutside={false}
                     closeOnHardwareBackPress={true}
                     showCancelButton={true}
                     showConfirmButton={true}
@@ -188,7 +189,7 @@ function Dashboard() {
                     showProgress={false}
                     title="Berhasil"
                     message="Anda berhasil keluar"
-                    closeOnTouchOutside={true}
+                    closeOnTouchOutside={false}
                     closeOnHardwareBackPress={true}
                     showCancelButton={false}
                     showConfirmButton={true}
@@ -212,10 +213,7 @@ export default function HomeScreenUser() {
             screenOptions={{
                 headerShown: false,
                 style: {
-                    elevation: 0, // Remove shadow on Android
-                },
-                labelStyle: {
-                    marginBottom: hp(1), // Set margin bottom for Tab Screen names
+                    elevation: 0,
                 },
             }}>
             <Tab.Screen
@@ -237,11 +235,11 @@ export default function HomeScreenUser() {
                 }}
             />
             <Tab.Screen
-                name="Kesehatan"
+                name="Menu Makan Harian"
                 component={KesehatanScreen}
                 options={{
                     tabBarIcon: ({ color, size }) => (
-                        <HeartIcon color={color} size={size} />
+                        <CalendarDaysIcon color={color} size={size} />
                     ),
                 }}
             />

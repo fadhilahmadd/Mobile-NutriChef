@@ -11,6 +11,7 @@ import AllRecipesDetect from '../screens/AllRecipesDetect';
 import RegisterScreen from '../auth/register';
 import LoginScreen from '../auth/login';
 import HomeScreenUser from '../auth/homeuser';
+import RecipeDetailUser from '../screens/RecipeDetailUser';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,7 @@ function AppNavigation() {
                 <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
                 <Stack.Screen name="LoginScreen" component={LoginScreen} />
                 <Stack.Screen name="HomeScreenUser" component={HomeScreenUser} />
+                <Stack.Screen name="RecipeDetailUser" component={RecipeDetailUser} />
             </Stack.Navigator>
         </NavigationContainer>
     );
